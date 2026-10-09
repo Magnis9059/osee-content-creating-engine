@@ -44,6 +44,10 @@ def save_generated_db(items):
     except Exception as e:
         print(f"Error saving DB: {e}")
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "app": "OSEE Content Studio"}
+
 @app.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request, ws: str = "osee.co.id"):
     if ws not in WORKSPACES:
