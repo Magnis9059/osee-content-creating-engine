@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv
+env/
+venv/
+outputs/*.jpg
+storage/generated_items.json
+.DS_Store

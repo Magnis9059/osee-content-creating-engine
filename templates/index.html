@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSEE Content Studio — Multi-Brand Automation</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-emerald-500 to-indigo-600 flex items-center justify-center font-extrabold text-white shadow-lg shadow-blue-500/20">
+                    O
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-tight">OSEE Content Studio</h1>
+                    <p class="text-xs text-slate-400">Multi-Brand Automated Production & Scheduler</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Model Lock: {{ preferred_model }}
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
+                    Railway Ready
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Workspace Selector Bar (Dipisahkan Tiap Workspace) -->
+    <section class="border-b border-slate-800 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-2 flex items-center gap-1.5">
+                    <i data-lucide="layers" class="w-4 h-4 text-blue-400"></i> Workspace:
+                </span>
+                {% for key, ws in workspaces.items() %}
+                <a href="/?ws={{ key }}" 
+                   class="px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border {{ 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/20' if key == selected_ws else 'bg-slate-800/80 text-slate-300 border-slate-700/80 hover:bg-slate-800 hover:text-white' }}">
+                    {% if key == 'osee.co.id' %}
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    {% elif key == 'one-stop-english-education' %}
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    {% else %}
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    {% endif %}
+                    {{ ws.name }}
+                </a>
+                {% endfor %}
+            </div>
+
+            <!-- Workspace Settings Badge -->
+            <div class="text-xs text-slate-400 bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2">
+                <i data-lucide="settings-2" class="w-3.5 h-3.5 text-slate-300"></i>
+                <span class="font-medium text-slate-300">Niche:</span> {{ current_ws.niche }}
+                <span class="text-slate-600">|</span>
+                <span class="font-medium text-emerald-400">14–16 Konten/Bln</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Content Generator & Custom Keyword (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Generate Form Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-800">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Generate Konten Baru</h2>
+                            <p class="text-xs text-slate-400">Setting khusus workspace: <span class="text-blue-400 font-semibold">{{ current_ws.name }}</span></p>
+                        </div>
+                    </div>
+                    <span class="text-xs px-2.5 py-1 bg-slate-800 text-slate-300 rounded-full border border-slate-700">
+                        Pillow + AI Prompt Lock
+                    </span>
+                </div>
+
+                <form id="generateForm" class="space-y-4">
+                    <input type="hidden" name="workspace" value="{{ selected_ws }}">
+
+                    <!-- Custom Keyword Insertion -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 flex items-center justify-between">
+                            <span><i data-lucide="tag" class="w-3.5 h-3.5 inline mr-1 text-blue-400"></i> Insert Keyword / Ide Spesifik</span>
+                            <span class="text-[10px] text-slate-400 font-normal">Ketik topik atau klik dari Hari Besar di samping</span>
+                        </label>
+                        <input type="text" id="custom_keyword" name="custom_keyword" 
+                               placeholder="Contoh: Bocoran Target Skor TOEIC Rekrutmen BUMN 2026..." 
+                               class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                    </div>
+
+                    <!-- Headline & Subheadline Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Headline Poster</label>
+                            <input type="text" id="headline" name="headline" placeholder="Headline Utama (Condense & Bold)"
+                                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sub-Headline</label>
+                            <input type="text" id="subheadline" name="subheadline" placeholder="Sub-judul penjelas singkat"
+                                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- 4 Bullet Points / Badge Benefits -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+                            Poin Konten / Badge Fitur (Maks 4 Poin Sesuai Desain Terkunci)
+                        </label>
+                        <div class="space-y-2">
+                            <input type="text" id="bullet1" name="bullet1" placeholder="Poin 1: misal 'Entry Level: Skor 500+'" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
+                            <input type="text" id="bullet2" name="bullet2" placeholder="Poin 2: misal 'Management Trainee: Skor 650+'" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
+                            <input type="text" id="bullet3" name="bullet3" placeholder="Poin 3: misal 'Multinational Office: Skor 750+'" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
+                            <input type="text" id="bullet4" name="bullet4" placeholder="Poin 4 (Opsional)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Call To Action -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Call To Action (CTA)</label>
+                        <input type="text" id="cta" name="cta" placeholder="Contoh: Raih sertifikat resmi TOEIC berlisensi ETS sekarang!"
+                               class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="pt-2 flex items-center justify-between">
+                        <button type="button" onclick="autoFillTopicBank()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+                            <i data-lucide="shuffle" class="w-3.5 h-3.5"></i> Muat Template Niche
+                        </button>
+                        <button type="submit" id="submitBtn" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 flex items-center gap-2 transition">
+                            <i data-lucide="zap" class="w-4 h-4"></i> Generate Draft & Prompt
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Generation Result Box (Dynamic) -->
+                <div id="resultBox" class="mt-6 pt-5 border-t border-slate-800 hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                            <i data-lucide="check-circle" class="w-4 h-4"></i> Draft Siap Diproduksi
+                        </span>
+                        <span id="itemIdBadge" class="text-[10px] text-slate-500 font-mono"></span>
+                    </div>
+
+                    <!-- Prompt Preview -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-slate-300 flex items-center gap-1">
+                                <i data-lucide="image" class="w-3.5 h-3.5 text-blue-400"></i> Locked Gemini 3.8 Flash Visual Prompt:
+                            </span>
+                            <button onclick="copyToClipboard('promptText')" class="text-xs text-blue-400 hover:underline">Copy Prompt</button>
+                        </div>
+                        <p id="promptText" class="text-xs text-slate-400 font-mono leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800 select-all"></p>
+                    </div>
+
+                    <!-- Caption Preview -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-slate-300 flex items-center gap-1">
+                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400"></i> Caption IG / Threads / FB:
+                            </span>
+                            <button onclick="copyToClipboard('captionText')" class="text-xs text-emerald-400 hover:underline">Copy Caption</button>
+                        </div>
+                        <pre id="captionText" class="text-xs text-slate-300 whitespace-pre-wrap font-sans bg-slate-900/60 p-3 rounded-lg border border-slate-800 max-h-48 overflow-y-auto"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Generated Items History -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 text-slate-400"></i> Histori Draft Konten Terakhir
+                    </h3>
+                    <span class="text-xs text-slate-500">{{ history|length }} draft</span>
+                </div>
+
+                {% if history %}
+                <div class="space-y-3">
+                    {% for h in history %}
+                    <div class="p-3.5 bg-slate-950 border border-slate-800/80 rounded-xl hover:border-slate-700 transition">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <h4 class="text-xs font-bold text-white">{{ h.content_data.headline }}</h4>
+                            <span class="text-[10px] text-slate-500">{{ h.created_at }}</span>
+                        </div>
+                        <p class="text-xs text-slate-400 line-clamp-2 mb-2">{{ h.content_data.subheadline }}</p>
+                        <div class="flex items-center gap-2 text-[10px]">
+                            <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">{{ h.workspace }}</span>
+                            <span class="text-slate-500">Keyword: {{ h.keyword or 'Auto-Topic' }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-slate-500 text-xs">
+                    Belum ada draft konten yang digenerate untuk workspace ini.
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- Right Column: Indonesian Holidays & Scheduled Aidelly Posts (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Skill Scraping: Hari Besar Indonesia Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center border border-rose-500/20">
+                            <i data-lucide="calendar" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Hari Besar Indonesia</h3>
+                            <p class="text-[11px] text-slate-400">Scraping Kalender Bulan Ini</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 bg-rose-500/10 text-rose-400 rounded-full border border-rose-500/20">
+                        {{ holidays|length }} Momen
+                    </span>
+                </div>
+
+                <!-- Suggested Content Angles from Holidays -->
+                {% if holiday_angles %}
+                <div class="mb-4 space-y-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Rekomendasi Angle Niche:
+                    </span>
+                    {% for a in holiday_angles %}
+                    <div class="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl cursor-pointer hover:bg-amber-500/10 transition"
+                         onclick="applyHolidayAngle('{{ a.angle }}', '{{ a.suggested_badge }}')">
+                        <div class="flex items-center justify-between text-xs font-semibold text-amber-300 mb-1">
+                            <span>{{ a.holiday }}</span>
+                            <span class="text-[10px] text-slate-400">{{ a.date }}</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">{{ a.angle }}</p>
+                        <span class="mt-2 inline-block text-[10px] text-amber-400 underline font-medium">Klik untuk terapkan ke form</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Holiday List -->
+                <div class="max-h-64 overflow-y-auto space-y-2 pr-1">
+                    {% for h in holidays %}
+                    <div class="p-2.5 bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-between text-xs">
+                        <div>
+                            <p class="font-medium text-slate-200">{{ h.name }}</p>
+                            <span class="text-[10px] text-slate-500">{{ h.category }}</span>
+                        </div>
+                        <span class="text-[11px] font-mono font-semibold {{ 'text-rose-400 font-bold' if h.is_national_holiday else 'text-slate-400' }}">
+                            {{ h.date }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Upcoming / Scheduled Content Preview Card (Aidelly Live API) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                            <i data-lucide="clock" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Upcoming / Scheduled Post</h3>
+                            <p class="text-[11px] text-slate-400">Live dari Kalender Aidelly</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">
+                        {{ scheduled_posts|length }} Post Terjadwal
+                    </span>
+                </div>
+
+                {% if scheduled_posts %}
+                <div class="max-h-80 overflow-y-auto space-y-3 pr-1">
+                    {% for post in scheduled_posts %}
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                                <i data-lucide="calendar-check" class="w-3 h-3"></i> {{ post.scheduled_at }}
+                            </span>
+                            <span class="px-1.5 py-0.5 text-[9px] rounded uppercase font-bold {{ 'bg-amber-500/10 text-amber-400' if post.status == 'SCHEDULED' else 'bg-slate-800 text-slate-400' }}">
+                                {{ post.status }}
+                            </span>
+                        </div>
+                        <p class="text-slate-300 font-medium line-clamp-2 leading-relaxed">
+                            {{ post.caption }}
+                        </p>
+                        <div class="flex items-center gap-1 text-[10px] text-slate-500 pt-1">
+                            <i data-lucide="share-2" class="w-3 h-3"></i>
+                            Channels: {{ post.channels|join(', ') }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-slate-500 text-xs">
+                    <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2 text-slate-600"></i>
+                    Belum ada postingan yang dijadwalkan di Aidelly untuk workspace ini pada periode ini.
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-4 bg-slate-900/60 text-center text-xs text-slate-500">
+        OSEE Automation Engine &copy; 2026 &bull; Ready for Railway Cloud &bull; Model Gemini 3.8 Flash Locked
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        lucide.createIcons();
+
+        // Sample Data for Topic Autofill
+        const sampleTopics = {
+            'osee.co.id': {
+                keyword: 'Passing Grade TOEIC BUMN & Multinasional 2026',
+                headline: 'TARGET SKOR TOEIC 2026',
+                subheadline: 'Passing Grade Rekrutmen BUMN & Global Company!',
+                b1: 'Entry Level: Skor Minimal 500+',
+                b2: 'Management Trainee: Skor Minimal 650+',
+                b3: 'Multinational Office: Skor Minimal 750+',
+                cta: 'Raih sertifikat resmi TOEIC berlisensi ETS dengan hasil instan di osee.co.id!'
+            },
+            'one-stop-english-education': {
+                keyword: 'Beasiswa Prestige Top Dunia TOEFL iBT',
+                headline: 'TARGET SKOR TOEFL iBT',
+                subheadline: 'Syarat Lolos Beasiswa Top Dunia 2026',
+                b1: 'Harvard, Oxford, Melbourne: Minimal 100+',
+                b2: 'Fulbright & Chevening: Minimal 85+',
+                b3: 'Tes online di One Stop English Education',
+                cta: 'Konsultasi gratis & tes TOEFL resmi ETS di One Stop English Education!'
+            },
+            'osee-digital': {
+                keyword: 'Custom HRIS & Payroll Multi-Cabang Enterprise',
+                headline: 'OTOMATISASI PAYROLL MULTI-CABANG',
+                subheadline: 'Solusi HRIS & Payroll 100% Bebas Selisih',
+                b1: 'Rekap Presensi GPS & Shift Kerja',
+                b2: 'Hitung Lembur & BPJS Otomatis',
+                b3: 'Slip Gaji Digital via WhatsApp',
+                b4: 'Solusi: Custom HRIS Enterprise',
+                cta: 'Konsultasi Automasi: WA 0856-4359-7072 | oseedigital.id | @osee_digital'
+            }
+        };
+
+        function autoFillTopicBank() {
+            const ws = "{{ selected_ws }}";
+            const data = sampleTopics[ws] || sampleTopics['osee.co.id'];
+            document.getElementById('custom_keyword').value = data.keyword;
+            document.getElementById('headline').value = data.headline;
+            document.getElementById('subheadline').value = data.subheadline;
+            document.getElementById('bullet1').value = data.b1 || '';
+            document.getElementById('bullet2').value = data.b2 || '';
+            document.getElementById('bullet3').value = data.b3 || '';
+            document.getElementById('bullet4').value = data.b4 || '';
+            document.getElementById('cta').value = data.cta || '';
+        }
+
+        function applyHolidayAngle(angleText, badge) {
+            document.getElementById('custom_keyword').value = angleText;
+            document.getElementById('headline').value = angleText.split(':')[0] || 'EDISI SPESIAL HARI BESAR';
+            document.getElementById('subheadline').value = angleText.split(':')[1]?.trim() || angleText;
+            if (badge) {
+                document.getElementById('bullet1').value = badge;
+            }
+            window.scrollTo({ top: 150, behavior: 'smooth' });
+        }
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text);
+            alert("Teks berhasil disalin ke clipboard!");
+        }
+
+        // Form Submission
+        document.getElementById('generateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memproses...`;
+            btn.disabled = true;
+
+            const formData = new FormData(this);
+
+            try {
+                const resp = await fetch('/api/generate', {
+                    method: 'POST',
+                    body: formData
+                });
+                const res = await resp.json();
+
+                if (res.success) {
+                    document.getElementById('resultBox').classList.remove('hidden');
+                    document.getElementById('itemIdBadge').innerText = res.item.id;
+                    document.getElementById('promptText').innerText = res.item.image_prompt;
+                    document.getElementById('captionText').innerText = res.item.caption;
+                    lucide.createIcons();
+                    document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Gagal generate: ' + (res.error || 'Terjadi kesalahan'));
+                }
+            } catch (err) {
+                alert('Error koneksi: ' + err.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
