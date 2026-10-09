@@ -20,9 +20,13 @@ from engine.image_pipeline import composite_post_image
 
 app = FastAPI(title="OSEE Content Studio", description="Automated Content Engine for OSEE Brands")
 
-# Mount static and outputs
+# Mount static and outputs (safely create directories if they do not exist)
+static_dir = os.path.join(current_dir, "static")
+os.makedirs(static_dir, exist_ok=True)
+os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+
 templates = Jinja2Templates(directory=os.path.join(current_dir, "templates"))
-app.mount("/static", StaticFiles(directory=os.path.join(current_dir, "static")), name="static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 app.mount("/outputs", StaticFiles(directory=DOWNLOADS_DIR), name="outputs")
 
 # In-memory storage / JSON persistence for generated contents
