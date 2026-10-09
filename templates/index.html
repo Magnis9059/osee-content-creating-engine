@@ -6,57 +6,93 @@
     <title>OSEE Content Studio — Multi-Brand Automation</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tealbrand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-teal-500 selection:text-white">
 
-    <!-- Top Navigation Bar -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- Top Navigation Bar (Tema Terang Ijo Toska Elegan) -->
+    <header class="border-b border-teal-100 bg-white/95 backdrop-blur sticky top-0 z-50 shadow-sm">
+        <div class="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-emerald-500 to-indigo-600 flex items-center justify-center font-extrabold text-white shadow-lg shadow-blue-500/20">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 via-teal-500 to-emerald-500 flex items-center justify-center font-extrabold text-white shadow-md shadow-teal-500/20 text-lg">
                     O
                 </div>
                 <div>
-                    <h1 class="text-base font-bold text-white leading-tight">OSEE Content Studio</h1>
-                    <p class="text-xs text-slate-400">Multi-Brand Automated Production & Scheduler</p>
+                    <h1 class="text-base font-bold text-slate-900 leading-tight flex items-center gap-2">
+                        OSEE Content Studio
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200">v2.5 Live</span>
+                    </h1>
+                    <p class="text-xs text-slate-500">Multi-Brand Automated Production, Trending Scanner & Scheduler</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Model Lock: {{ preferred_model }}
+            <div class="flex items-center gap-2.5">
+                <!-- Cron Status Indicator -->
+                <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200">
+                    <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+                    Cron Mingguan: Aktif (Auto-Sync)
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-emerald-600"></i>
+                    Model: {{ preferred_model }}
                 </span>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                    <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
+                    <i data-lucide="cloud" class="w-3.5 h-3.5 text-sky-600"></i>
                     Railway Ready
                 </span>
             </div>
         </div>
     </header>
 
-    <!-- Workspace Selector Bar (Dipisahkan Tiap Workspace) -->
-    <section class="border-b border-slate-800 bg-slate-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+    <!-- Workspace Selector Bar (Toska Modern) -->
+    <section class="border-b border-teal-100 bg-white">
+        <div class="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-2">
-                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-2 flex items-center gap-1.5">
-                    <i data-lucide="layers" class="w-4 h-4 text-blue-400"></i> Workspace:
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 mr-2 flex items-center gap-1.5">
+                    <i data-lucide="layers" class="w-4 h-4 text-teal-600"></i> Workspace:
                 </span>
                 {% for key, ws in workspaces.items() %}
                 <a href="/?ws={{ key }}" 
-                   class="px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border {{ 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/20' if key == selected_ws else 'bg-slate-800/80 text-slate-300 border-slate-700/80 hover:bg-slate-800 hover:text-white' }}">
+                   class="px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 border {{ 'bg-teal-600 text-white border-teal-600 shadow-md shadow-teal-600/20' if key == selected_ws else 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-teal-50 hover:border-teal-300 hover:text-teal-800' }}">
                     {% if key == 'osee.co.id' %}
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 border border-white"></span>
                     {% elif key == 'one-stop-english-education' %}
-                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 border border-white"></span>
                     {% else %}
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-teal-300 border border-white"></span>
                     {% endif %}
                     {{ ws.name }}
                 </a>
@@ -64,35 +100,35 @@
             </div>
 
             <!-- Workspace Settings Badge -->
-            <div class="text-xs text-slate-400 bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2">
-                <i data-lucide="settings-2" class="w-3.5 h-3.5 text-slate-300"></i>
-                <span class="font-medium text-slate-300">Niche:</span> {{ current_ws.niche }}
-                <span class="text-slate-600">|</span>
-                <span class="font-medium text-emerald-400">14–16 Konten/Bln</span>
+            <div class="text-xs text-slate-600 bg-teal-50/70 px-3.5 py-1.5 rounded-xl border border-teal-100 flex items-center gap-2">
+                <i data-lucide="settings-2" class="w-3.5 h-3.5 text-teal-600"></i>
+                <span class="font-medium text-slate-700">Niche:</span> {{ current_ws.niche }}
+                <span class="text-teal-300">|</span>
+                <span class="font-bold text-teal-700">Target 14–16 Konten/Bln</span>
             </div>
         </div>
     </section>
 
-    <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Main Content Area: 3 Kolom Responsif (5 - 3.5 - 3.5 cols) -->
+    <main class="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-7 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Left Column: Content Generator & Custom Keyword (7 cols) -->
-        <div class="lg:col-span-7 space-y-6">
+        <!-- KOLOM 1: Content Generator & Custom Keyword (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
             
             <!-- Generate Form Card -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-800">
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow transition duration-200">
+                <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
-                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center border border-teal-200">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-teal-600"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-white">Generate Konten Baru</h2>
-                            <p class="text-xs text-slate-400">Setting khusus workspace: <span class="text-blue-400 font-semibold">{{ current_ws.name }}</span></p>
+                            <h2 class="text-base font-bold text-slate-900">Generate Konten Baru</h2>
+                            <p class="text-xs text-slate-500">Workspace Aktif: <span class="text-teal-700 font-bold">{{ current_ws.name }}</span></p>
                         </div>
                     </div>
-                    <span class="text-xs px-2.5 py-1 bg-slate-800 text-slate-300 rounded-full border border-slate-700">
-                        Pillow + AI Prompt Lock
+                    <span class="text-xs px-3 py-1 bg-teal-50 text-teal-700 font-semibold rounded-full border border-teal-200">
+                        Brand Preset Locked
                     </span>
                 </div>
 
@@ -101,127 +137,135 @@
 
                     <!-- Custom Keyword Insertion -->
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 flex items-center justify-between">
-                            <span><i data-lucide="tag" class="w-3.5 h-3.5 inline mr-1 text-blue-400"></i> Insert Keyword / Ide Spesifik</span>
-                            <span class="text-[10px] text-slate-400 font-normal">Ketik topik atau klik dari Hari Besar di samping</span>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center justify-between">
+                            <span><i data-lucide="tag" class="w-3.5 h-3.5 inline mr-1 text-teal-600"></i> Keyword / Ide Konten</span>
+                            <span class="text-[10px] text-teal-600 font-medium">Auto-fill dari Trending / Hari Besar</span>
                         </label>
                         <input type="text" id="custom_keyword" name="custom_keyword" 
-                               placeholder="Contoh: Bocoran Target Skor TOEIC Rekrutmen BUMN 2026..." 
-                               class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                               placeholder="Contoh: Bocoran Passing Grade TOEIC Rekrutmen BUMN 2026..." 
+                               class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition">
                     </div>
 
                     <!-- Headline & Subheadline Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Headline Poster</label>
-                            <input type="text" id="headline" name="headline" placeholder="Headline Utama (Condense & Bold)"
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Headline Poster</label>
+                            <input type="text" id="headline" name="headline" placeholder="Headline Utama Bold"
+                                   class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sub-Headline</label>
-                            <input type="text" id="subheadline" name="subheadline" placeholder="Sub-judul penjelas singkat"
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Sub-Headline</label>
+                            <input type="text" id="subheadline" name="subheadline" placeholder="Sub-judul penjelas"
+                                   class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition">
                         </div>
                     </div>
 
                     <!-- 4 Bullet Points / Badge Benefits -->
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">
-                            Poin Konten / Badge Fitur (Maks 4 Poin Sesuai Desain Terkunci)
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
+                            <span>Poin Konten / Badge Fitur (Maks 4 Poin)</span>
+                            <span class="text-[10px] text-slate-400">Layout Resmi Terkunci</span>
                         </label>
                         <div class="space-y-2">
-                            <input type="text" id="bullet1" name="bullet1" placeholder="Poin 1: misal 'Entry Level: Skor 500+'" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
-                            <input type="text" id="bullet2" name="bullet2" placeholder="Poin 2: misal 'Management Trainee: Skor 650+'" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
-                            <input type="text" id="bullet3" name="bullet3" placeholder="Poin 3: misal 'Multinational Office: Skor 750+'" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
-                            <input type="text" id="bullet4" name="bullet4" placeholder="Poin 4 (Opsional)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500">
+                            <input type="text" id="bullet1" name="bullet1" placeholder="Poin 1: misal 'Entry Level: Skor Minimal 500+'" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-3.5 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500">
+                            <input type="text" id="bullet2" name="bullet2" placeholder="Poin 2: misal 'Management Trainee: Skor Minimal 650+'" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-3.5 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500">
+                            <input type="text" id="bullet3" name="bullet3" placeholder="Poin 3: misal 'Multinational Office: Skor 750+'" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-3.5 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500">
+                            <input type="text" id="bullet4" name="bullet4" placeholder="Poin 4 (Opsional)" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-3.5 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500">
                         </div>
                     </div>
 
                     <!-- Call To Action -->
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Call To Action (CTA)</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Call To Action (CTA)</label>
                         <input type="text" id="cta" name="cta" placeholder="Contoh: Raih sertifikat resmi TOEIC berlisensi ETS sekarang!"
-                               class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                               class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500">
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="pt-2 flex items-center justify-between">
-                        <button type="button" onclick="autoFillTopicBank()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+                        <button type="button" onclick="autoFillTopicBank()" class="text-xs text-slate-500 hover:text-teal-700 font-semibold flex items-center gap-1.5 transition">
                             <i data-lucide="shuffle" class="w-3.5 h-3.5"></i> Muat Template Niche
                         </button>
-                        <button type="submit" id="submitBtn" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 flex items-center gap-2 transition">
+                        <button type="submit" id="submitBtn" class="bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl shadow-md shadow-teal-600/30 flex items-center gap-2 transition transform active:scale-95">
                             <i data-lucide="zap" class="w-4 h-4"></i> Generate Draft & Prompt
                         </button>
                     </div>
                 </form>
 
                 <!-- Generation Result Box (Dynamic) -->
-                <div id="resultBox" class="mt-6 pt-5 border-t border-slate-800 hidden space-y-4">
+                <div id="resultBox" class="mt-6 pt-5 border-t border-slate-100 hidden space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                            <i data-lucide="check-circle" class="w-4 h-4"></i> Draft Siap Diproduksi
+                        <span class="text-xs font-bold text-teal-800 flex items-center gap-1.5">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-teal-600"></i> Draft Berhasil Dibuat
                         </span>
-                        <span id="itemIdBadge" class="text-[10px] text-slate-500 font-mono"></span>
+                        <span id="itemIdBadge" class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md border border-slate-200"></span>
                     </div>
 
-                    <!-- Prompt Preview -->
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-semibold text-slate-300 flex items-center gap-1">
-                                <i data-lucide="image" class="w-3.5 h-3.5 text-blue-400"></i> Locked Gemini 3.8 Flash Visual Prompt:
-                            </span>
-                            <button onclick="copyToClipboard('promptText')" class="text-xs text-blue-400 hover:underline">Copy Prompt</button>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-700">Prompt Gemini 3.8 Flash:</span>
+                            <button onclick="copyToClipboard('promptText')" class="text-[11px] text-teal-700 hover:underline font-semibold flex items-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copy Prompt
+                            </button>
                         </div>
-                        <p id="promptText" class="text-xs text-slate-400 font-mono leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800 select-all"></p>
+                        <p id="promptText" class="text-xs text-slate-600 font-mono bg-white p-3 rounded-lg border border-slate-200 leading-relaxed"></p>
                     </div>
 
-                    <!-- Caption Preview -->
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-semibold text-slate-300 flex items-center gap-1">
-                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400"></i> Caption IG / Threads / FB:
-                            </span>
-                            <button onclick="copyToClipboard('captionText')" class="text-xs text-emerald-400 hover:underline">Copy Caption</button>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-700">Caption Feed Instagram & FB:</span>
+                            <button onclick="copyToClipboard('captionText')" class="text-[11px] text-teal-700 hover:underline font-semibold flex items-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copy Caption
+                            </button>
                         </div>
-                        <pre id="captionText" class="text-xs text-slate-300 whitespace-pre-wrap font-sans bg-slate-900/60 p-3 rounded-lg border border-slate-800 max-h-48 overflow-y-auto"></pre>
+                        <div id="captionText" class="text-xs text-slate-700 bg-white p-3.5 rounded-lg border border-slate-200 whitespace-pre-line leading-relaxed max-h-48 overflow-y-auto"></div>
+                    </div>
+
+                    <div class="pt-2 text-center">
+                        <p class="text-xs text-teal-800 font-semibold mb-2">Draft tersimpan di histori. Klik draft di bawah untuk render poster & schedule ke Aidelly!</p>
+                        <button onclick="location.reload()" class="text-xs bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold px-4 py-2 rounded-xl border border-teal-200 transition">
+                            Perbarui Daftar Histori Draft &rarr;
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- Recent Generated Items History -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-base font-bold text-white flex items-center gap-2">
-                        <i data-lucide="history" class="w-4 h-4 text-slate-400"></i> Histori Draft Konten Terakhir
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 text-teal-600"></i> Histori Draft Konten Terakhir
                     </h3>
-                    <span class="text-xs text-slate-500">{{ history|length }} draft</span>
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">{{ history|length }} draft</span>
                 </div>
 
                 {% if history %}
                 <div class="space-y-3">
                     {% for h in history %}
-                    <div class="p-3.5 bg-slate-950 border border-slate-800/80 rounded-xl hover:border-blue-500/60 transition cursor-pointer group"
+                    <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-teal-500 hover:bg-teal-50/30 transition cursor-pointer group shadow-2xs"
                          onclick="openDraftModal('{{ h.id }}')">
                         <div class="flex items-center justify-between mb-1.5">
-                            <h4 class="text-xs font-bold text-white group-hover:text-blue-400 transition flex items-center gap-1.5">
-                                <i data-lucide="eye" class="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-400"></i>
+                            <h4 class="text-xs font-bold text-slate-800 group-hover:text-teal-700 transition flex items-center gap-1.5">
+                                <i data-lucide="eye" class="w-3.5 h-3.5 text-teal-500"></i>
                                 {{ h.content_data.headline }}
                             </h4>
-                            <span class="text-[10px] text-slate-500">{{ h.created_at }}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">{{ h.created_at }}</span>
                         </div>
-                        <p class="text-xs text-slate-400 line-clamp-2 mb-2">{{ h.content_data.subheadline }}</p>
+                        <p class="text-xs text-slate-600 line-clamp-2 mb-2">{{ h.content_data.subheadline }}</p>
                         <div class="flex items-center justify-between text-[10px]">
                             <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">{{ h.workspace }}</span>
-                                <span class="text-slate-500">Keyword: {{ h.keyword or 'Auto-Topic' }}</span>
+                                <span class="px-2 py-0.5 rounded bg-teal-100/70 text-teal-800 font-semibold border border-teal-200">{{ h.workspace }}</span>
+                                <span class="text-slate-500 font-medium">Keyword: {{ h.keyword or 'Auto-Topic' }}</span>
                             </div>
-                            <span class="text-blue-400 font-semibold group-hover:underline">Buka Preview & Schedule &rarr;</span>
+                            <span class="text-teal-700 font-bold group-hover:underline flex items-center gap-1">
+                                Buka Preview & Schedule &rarr;
+                            </span>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="text-center py-8 text-slate-500 text-xs">
+                <div class="text-center py-8 text-slate-400 text-xs">
                     Belum ada draft konten yang digenerate untuk workspace ini.
                 </div>
                 {% endif %}
@@ -229,22 +273,106 @@
 
         </div>
 
-        <!-- Right Column: Indonesian Holidays & Scheduled Aidelly Posts (5 cols) -->
-        <div class="lg:col-span-5 space-y-6">
-            
-            <!-- Skill Scraping: Hari Besar Indonesia Card -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center border border-rose-500/20">
-                            <i data-lucide="calendar" class="w-4 h-4"></i>
+        <!-- KOLOM 2 (BARU): TOPIC TRENDING TERKINI (CRON JOB MINGGUAN) (3.5 cols) -->
+        <div class="lg:col-span-3.5 space-y-6">
+            <div class="bg-white border border-teal-200/80 rounded-2xl p-5 shadow-sm hover:shadow transition duration-200 relative overflow-hidden">
+                <!-- Highlight accent top bar -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-teal-500 via-emerald-400 to-teal-600"></div>
+
+                <div class="flex items-center justify-between mb-3.5 pb-3 border-b border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center border border-teal-200">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-teal-600"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-white">Hari Besar Indonesia</h3>
-                            <p class="text-[11px] text-slate-400">Scraping Kalender Bulan Ini</p>
+                            <h3 class="text-sm font-bold text-slate-900">Trending Terkini</h3>
+                            <p class="text-[11px] text-teal-700 font-medium">Web, IG, Threads & TikTok</p>
                         </div>
                     </div>
-                    <span class="text-[10px] font-semibold px-2 py-0.5 bg-rose-500/10 text-rose-400 rounded-full border border-rose-500/20">
+                    <!-- Refresh Button -->
+                    <button onclick="refreshTrendingData()" id="btnRefreshTrends" title="Perbarui Topik Trending Sekarang" class="p-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 transition">
+                        <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Cron Info Badge -->
+                <div class="mb-3 p-2.5 bg-teal-50/70 border border-teal-200 rounded-xl flex items-center justify-between text-[11px]">
+                    <div class="flex items-center gap-1.5 text-teal-800 font-medium">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-teal-600"></i>
+                        <span>Cron Job: <b>Tiap Minggu</b></span>
+                    </div>
+                    <span id="trendingDateBadge" class="text-[10px] text-teal-700 font-semibold">{{ weekly_trends.display_date }}</span>
+                </div>
+
+                <!-- Rekomendasi Angle Siap Pakai -->
+                <div class="mb-4 space-y-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-teal-800 flex items-center gap-1.5">
+                        <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-500"></i> Rekomendasi Angle Niche:
+                    </span>
+                    <div id="trendingAnglesContainer" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                        {% for t in trending_angles %}
+                        <div class="p-3 bg-teal-50/40 border border-teal-200/90 rounded-xl cursor-pointer hover:bg-teal-100/60 transition group shadow-2xs"
+                             onclick="applyTrendingAngle('{{ t.suggested_keyword }}', '{{ t.suggested_headline }}', '{{ t.suggested_subheadline }}', '{{ t.cta }}')">
+                            <div class="flex items-center justify-between text-xs font-bold text-teal-900 mb-1">
+                                <span class="line-clamp-1">{{ t.trend }}</span>
+                                <span class="text-[9px] px-2 py-0.5 rounded-full bg-teal-200/80 text-teal-900 font-semibold shrink-0">{{ t.platform }}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-600 leading-relaxed line-clamp-2">{{ t.angle }}</p>
+                            <div class="mt-2 flex items-center justify-between text-[10px]">
+                                <span class="text-teal-700 font-bold group-hover:underline flex items-center gap-1">
+                                    <i data-lucide="arrow-right-circle" class="w-3 h-3"></i> Terapkan ke Form
+                                </span>
+                                <span class="text-slate-400 font-medium">{{ t.badge }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Tab Raw Trending Topics (Google, Social, News) -->
+                <div class="pt-2 border-t border-slate-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                            <i data-lucide="radio" class="w-3.5 h-3.5 text-teal-600"></i> Sumber Tren Live
+                        </span>
+                        <span class="text-[10px] text-slate-500">{{ weekly_trends.total_trends }} topik</span>
+                    </div>
+
+                    <div class="max-h-60 overflow-y-auto space-y-1.5 pr-1">
+                        {% for item in weekly_trends.raw_list %}
+                        <div class="p-2 bg-slate-50 hover:bg-teal-50/50 border border-slate-200 rounded-lg flex items-center justify-between text-xs cursor-pointer transition"
+                             onclick="applyRawTrend('{{ item.topic }}')">
+                            <div class="flex items-center gap-2 truncate pr-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0"></span>
+                                <span class="text-slate-700 font-medium truncate">{{ item.topic }}</span>
+                            </div>
+                            <span class="text-[9px] font-semibold text-slate-500 shrink-0 bg-white px-2 py-0.5 rounded border border-slate-200">
+                                {{ item.platform.split(' ')[0] }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- KOLOM 3: Hari Besar Indonesia & Scheduled Aidelly (3.5 cols) -->
+        <div class="lg:col-span-3.5 space-y-6">
+            
+            <!-- Hari Besar Indonesia Card -->
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm hover:shadow transition duration-200">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-200">
+                            <i data-lucide="calendar" class="w-4 h-4 text-rose-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900">Hari Besar Indonesia</h3>
+                            <p class="text-[11px] text-slate-500">Momen Bulan Ini</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-bold px-2.5 py-0.5 bg-rose-50 text-rose-700 rounded-full border border-rose-200">
                         {{ holidays|length }} Momen
                     </span>
                 </div>
@@ -252,32 +380,34 @@
                 <!-- Suggested Content Angles from Holidays -->
                 {% if holiday_angles %}
                 <div class="mb-4 space-y-2">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1">
-                        <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Rekomendasi Angle Niche:
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-700 flex items-center gap-1">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i> Angle Hari Libur:
                     </span>
-                    {% for a in holiday_angles %}
-                    <div class="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl cursor-pointer hover:bg-amber-500/10 transition"
-                         onclick="applyHolidayAngle('{{ a.angle }}', '{{ a.suggested_badge }}')">
-                        <div class="flex items-center justify-between text-xs font-semibold text-amber-300 mb-1">
-                            <span>{{ a.holiday }}</span>
-                            <span class="text-[10px] text-slate-400">{{ a.date }}</span>
+                    <div class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        {% for a in holiday_angles %}
+                        <div class="p-2.5 bg-amber-50/60 border border-amber-200 rounded-xl cursor-pointer hover:bg-amber-100/70 transition"
+                             onclick="applyHolidayAngle('{{ a.angle }}', '{{ a.suggested_badge }}')">
+                            <div class="flex items-center justify-between text-xs font-bold text-amber-900 mb-1">
+                                <span>{{ a.holiday }}</span>
+                                <span class="text-[10px] text-slate-500 font-mono">{{ a.date }}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-600 leading-relaxed">{{ a.angle }}</p>
+                            <span class="mt-1.5 inline-block text-[10px] text-amber-800 underline font-semibold">Terapkan ke form &rarr;</span>
                         </div>
-                        <p class="text-[11px] text-slate-300 leading-relaxed">{{ a.angle }}</p>
-                        <span class="mt-2 inline-block text-[10px] text-amber-400 underline font-medium">Klik untuk terapkan ke form</span>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
                 {% endif %}
 
                 <!-- Holiday List -->
-                <div class="max-h-64 overflow-y-auto space-y-2 pr-1">
+                <div class="max-h-52 overflow-y-auto space-y-1.5 pr-1">
                     {% for h in holidays %}
-                    <div class="p-2.5 bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-between text-xs">
+                    <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
                         <div>
-                            <p class="font-medium text-slate-200">{{ h.name }}</p>
+                            <p class="font-semibold text-slate-800">{{ h.name }}</p>
                             <span class="text-[10px] text-slate-500">{{ h.category }}</span>
                         </div>
-                        <span class="text-[11px] font-mono font-semibold {{ 'text-rose-400 font-bold' if h.is_national_holiday else 'text-slate-400' }}">
+                        <span class="text-[11px] font-mono font-bold {{ 'text-rose-600' if h.is_national_holiday else 'text-slate-500' }}">
                             {{ h.date }}
                         </span>
                     </div>
@@ -285,49 +415,49 @@
                 </div>
             </div>
 
-            <!-- Upcoming / Scheduled Content Preview Card (Aidelly Live API) -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
-                            <i data-lucide="clock" class="w-4 h-4"></i>
+            <!-- Scheduled Posts Card (Live Aidelly API) -->
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm hover:shadow transition duration-200">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center border border-teal-200">
+                            <i data-lucide="clock" class="w-4 h-4 text-teal-600"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-white">Upcoming / Scheduled Post</h3>
-                            <p class="text-[11px] text-slate-400">Live dari Kalender Aidelly</p>
+                            <h3 class="text-sm font-bold text-slate-900">Upcoming Post Aidelly</h3>
+                            <p class="text-[11px] text-slate-500">Live dari Kalender</p>
                         </div>
                     </div>
-                    <span class="text-[10px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">
-                        {{ scheduled_posts|length }} Post Terjadwal
+                    <span class="text-[10px] font-bold px-2.5 py-0.5 bg-teal-50 text-teal-700 rounded-full border border-teal-200">
+                        {{ scheduled_posts|length }} Post
                     </span>
                 </div>
 
                 {% if scheduled_posts %}
-                <div class="max-h-80 overflow-y-auto space-y-3 pr-1">
+                <div class="max-h-64 overflow-y-auto space-y-2.5 pr-1">
                     {% for post in scheduled_posts %}
-                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs space-y-1.5">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1.5 hover:border-teal-300 transition">
                         <div class="flex items-center justify-between">
-                            <span class="font-mono text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-                                <i data-lucide="calendar-check" class="w-3 h-3"></i> {{ post.scheduled_at }}
+                            <span class="font-mono text-[10px] text-teal-700 font-bold flex items-center gap-1">
+                                <i data-lucide="calendar-check" class="w-3 h-3 text-teal-600"></i> {{ post.scheduled_at }}
                             </span>
-                            <span class="px-1.5 py-0.5 text-[9px] rounded uppercase font-bold {{ 'bg-amber-500/10 text-amber-400' if post.status == 'SCHEDULED' else 'bg-slate-800 text-slate-400' }}">
+                            <span class="px-2 py-0.5 text-[9px] rounded-full uppercase font-bold {{ 'bg-amber-100 text-amber-800 border border-amber-200' if post.status == 'SCHEDULED' else 'bg-slate-200 text-slate-600' }}">
                                 {{ post.status }}
                             </span>
                         </div>
-                        <p class="text-slate-300 font-medium line-clamp-2 leading-relaxed">
+                        <p class="text-slate-700 font-medium line-clamp-2 leading-relaxed">
                             {{ post.caption }}
                         </p>
                         <div class="flex items-center gap-1 text-[10px] text-slate-500 pt-1">
-                            <i data-lucide="share-2" class="w-3 h-3"></i>
+                            <i data-lucide="share-2" class="w-3 h-3 text-teal-600"></i>
                             Channels: {{ post.channels|join(', ') }}
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="text-center py-8 text-slate-500 text-xs">
-                    <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2 text-slate-600"></i>
-                    Belum ada postingan yang dijadwalkan di Aidelly untuk workspace ini pada periode ini.
+                <div class="text-center py-8 text-slate-400 text-xs">
+                    <i data-lucide="calendar-x" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+                    Belum ada postingan terjadwal di Aidelly untuk workspace ini.
                 </div>
                 {% endif %}
             </div>
@@ -337,43 +467,45 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 py-4 bg-slate-900/60 text-center text-xs text-slate-500">
-        OSEE Automation Engine &copy; 2026 &bull; Ready for Railway Cloud &bull; Model Gemini 3.8 Flash Locked
+    <footer class="border-t border-slate-200 py-4 bg-white text-center text-xs text-slate-500">
+        <p>&copy; 2026 OSEE Content Studio &bull; Automated Production Engine &bull; Locked Gemini 3.8 Flash &bull; Aidelly Official REST API</p>
     </footer>
 
-    <!-- Interactive Scripts -->
+    <!-- Interactive JS Scripts -->
     <script>
         lucide.createIcons();
 
-        // Sample Data for Topic Autofill
+        // Sample topics per workspace
         const sampleTopics = {
             'osee.co.id': {
-                keyword: 'Passing Grade TOEIC BUMN & Multinasional 2026',
+                keyword: 'Target Skor TOEIC Rekrutmen BUMN & Karier 2026',
                 headline: 'TARGET SKOR TOEIC 2026',
-                subheadline: 'Passing Grade Rekrutmen BUMN & Global Company!',
+                subheadline: 'Bocoran Passing Grade Rekrutmen BUMN & Perbankan!',
                 b1: 'Entry Level: Skor Minimal 500+',
                 b2: 'Management Trainee: Skor Minimal 650+',
                 b3: 'Multinational Office: Skor Minimal 750+',
+                b4: 'Hasil Instan & Sertifikat Resmi Berlisensi ETS',
                 cta: 'Raih sertifikat resmi TOEIC berlisensi ETS dengan hasil instan di osee.co.id!'
             },
             'one-stop-english-education': {
-                keyword: 'Beasiswa Prestige Top Dunia TOEFL iBT',
-                headline: 'TARGET SKOR TOEFL iBT',
-                subheadline: 'Syarat Lolos Beasiswa Top Dunia 2026',
-                b1: 'Harvard, Oxford, Melbourne: Minimal 100+',
-                b2: 'Fulbright & Chevening: Minimal 85+',
-                b3: 'Tes online di One Stop English Education',
-                cta: 'Konsultasi gratis & tes TOEFL resmi ETS di One Stop English Education!'
+                keyword: 'Pendaftaran Beasiswa LPDP Tahap Baru & Skor TOEFL ITP',
+                headline: 'LPDP TAHAP II 2026',
+                subheadline: 'Pendaftaran Segera Dibuka! Amankan Sertifikat Bahasa Anda!',
+                b1: 'S2 Dalam Negeri: Minimal Skor 500+',
+                b2: 'S2 Luar Negeri: Minimal Skor 550+',
+                b3: 'S3 Luar Negeri: Minimal Skor 580+',
+                b4: 'Bersertifikat ETS Resmi Barcode',
+                cta: 'Konsultasi gratis & tes online resmi di One Stop English Education!'
             },
             'osee-digital': {
-                keyword: 'Custom HRIS & Payroll Multi-Cabang Enterprise',
-                headline: 'OTOMATISASI PAYROLL MULTI-CABANG',
-                subheadline: 'Solusi HRIS & Payroll 100% Bebas Selisih',
-                b1: 'Rekap Presensi GPS & Shift Kerja',
-                b2: 'Hitung Lembur & BPJS Otomatis',
-                b3: 'Slip Gaji Digital via WhatsApp',
-                b4: 'Solusi: Custom HRIS Enterprise',
-                cta: 'Konsultasi Automasi: WA 0856-4359-7072 | oseedigital.id | @osee_digital'
+                keyword: 'Central Kitchen ERP Kontrol Dapur Pusat Anti Selisih',
+                headline: 'KONTROL DAPUR PUSAT ANTI SELISIH',
+                subheadline: 'Otomatisasi Distribusi Bahan Baku Multi-Outlet Tanpa Selisih!',
+                b1: 'Sinkronisasi Stok Real-Time Antar Cabang',
+                b2: 'Pemberitahuan Kadaluarsa Otomatis',
+                b3: 'Laporan HPP & Margin Presisi',
+                b4: 'Integrasi POS & Pembayaran Terpusat',
+                cta: 'Konsultasikan custom ERP Central Kitchen untuk bisnis F&B Anda bersama oseedigital.id!'
             }
         };
 
@@ -397,7 +529,47 @@
             if (badge) {
                 document.getElementById('bullet1').value = badge;
             }
-            window.scrollTo({ top: 150, behavior: 'smooth' });
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+
+        // Apply Trending Angle to Form
+        function applyTrendingAngle(keyword, headline, subheadline, cta) {
+            document.getElementById('custom_keyword').value = keyword;
+            document.getElementById('headline').value = headline;
+            document.getElementById('subheadline').value = subheadline;
+            if (cta) document.getElementById('cta').value = cta;
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+
+        function applyRawTrend(topic) {
+            document.getElementById('custom_keyword').value = topic;
+            document.getElementById('headline').value = `TREN TERKINI: ${topic.slice(0, 25).toUpperCase()}`;
+            document.getElementById('subheadline').value = `Strategi Menghadapi Tren ${topic} Terkini`;
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+        }
+
+        async function refreshTrendingData() {
+            const btn = document.getElementById('btnRefreshTrends');
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-teal-600"></i>`;
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch('/api/trending/refresh?ws={{ selected_ws }}', { method: 'POST' });
+                const data = await resp.json();
+                if (data.success) {
+                    document.getElementById('trendingDateBadge').innerText = data.updated_at;
+                    alert('✅ Topik trending terkini dari Web, Social & News berhasil diperbarui!');
+                    window.location.reload();
+                } else {
+                    alert('Gagal refresh trending: ' + data.error);
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            } finally {
+                btn.innerHTML = `<i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>`;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
         }
 
         function copyToClipboard(elementId) {
@@ -455,7 +627,7 @@
             document.getElementById('modalSubheadline').innerText = '';
             document.getElementById('modalCaption').innerText = '';
             document.getElementById('modalPrompt').innerText = '';
-            document.getElementById('modalImageContainer').innerHTML = '<div class="py-12 text-slate-500 text-xs text-center"><i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-blue-500"></i>Memuat data draft...</div>';
+            document.getElementById('modalImageContainer').innerHTML = '<div class="py-12 text-slate-500 text-xs text-center"><i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-teal-600"></i>Memuat data draft...</div>';
             lucide.createIcons();
 
             try {
@@ -484,20 +656,20 @@
             const container = document.getElementById('modalImageContainer');
             if (item.image_url) {
                 container.innerHTML = `
-                    <div class="relative group">
-                        <img src="${item.image_url}" alt="Preview" class="w-full max-h-[460px] object-contain rounded-xl border border-slate-700 shadow-xl bg-slate-950">
-                        <a href="${item.image_url}" target="_blank" class="absolute bottom-3 right-3 bg-slate-900/90 text-white text-[11px] px-3 py-1.5 rounded-lg border border-slate-700 shadow flex items-center gap-1.5">
-                            <i data-lucide="maximize" class="w-3 h-3"></i> Buka Full HD
+                    <div class="relative group bg-slate-900 rounded-xl overflow-hidden p-2">
+                        <img src="${item.image_url}" alt="Preview" class="w-full max-h-[460px] object-contain rounded-lg border border-slate-700 shadow-xl bg-slate-950">
+                        <a href="${item.image_url}" target="_blank" class="absolute bottom-4 right-4 bg-teal-700/90 hover:bg-teal-600 text-white text-xs px-3.5 py-1.5 rounded-lg border border-teal-500/30 shadow-lg flex items-center gap-1.5 transition">
+                            <i data-lucide="maximize" class="w-3.5 h-3.5"></i> Buka Full HD
                         </a>
                     </div>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="py-16 text-center border-2 border-dashed border-slate-800 rounded-xl bg-slate-950/40">
-                        <i data-lucide="image-plus" class="w-10 h-10 mx-auto mb-3 text-slate-600"></i>
-                        <p class="text-xs text-slate-400 font-medium mb-1">Visual Poster Belum Dibuat</p>
-                        <p class="text-[11px] text-slate-500 max-w-xs mx-auto mb-4">Klik tombol di bawah untuk langsung generate gambar poster HD sesuai settingan brand & logo resmi.</p>
-                        <button onclick="triggerGenerateImage()" id="btnGenImage" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow inline-flex items-center gap-1.5 transition">
+                    <div class="py-16 text-center border-2 border-dashed border-teal-200 rounded-xl bg-teal-50/40">
+                        <i data-lucide="image-plus" class="w-10 h-10 mx-auto mb-3 text-teal-600"></i>
+                        <p class="text-xs text-slate-800 font-bold mb-1">Visual Poster Belum Dibuat</p>
+                        <p class="text-[11px] text-slate-500 max-w-xs mx-auto mb-4">Klik tombol di bawah untuk langsung generate poster HD sesuai logo & settingan brand resmi.</p>
+                        <button onclick="triggerGenerateImage()" id="btnGenImage" class="bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md inline-flex items-center gap-1.5 transition">
                             <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Generate Visual HD Sekarang
                         </button>
                     </div>
@@ -528,7 +700,6 @@
                 });
                 const res = await resp.json();
                 if (res.success) {
-                    // Reload modal
                     openDraftModal(activeDraftId);
                 } else {
                     alert('Gagal generate gambar: ' + (res.error || 'Terjadi kesalahan'));
@@ -570,65 +741,74 @@
         }
     </script>
 
-    <!-- Modal Dialog Preview & Schedule -->
-    <div id="draftModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    <!-- Modal Dialog Preview & Schedule (Tema Terang Bersih & Elegan) -->
+    <div id="draftModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Modal Header -->
-            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-teal-50/50">
                 <div class="flex items-center gap-2.5">
-                    <span id="modalWorkspaceBadge" class="text-xs font-semibold px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20"></span>
-                    <span id="modalItemId" class="text-[10px] text-slate-500 font-mono"></span>
+                    <span id="modalWorkspaceBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-teal-100 text-teal-800 border border-teal-200"></span>
+                    <span id="modalItemId" class="text-[11px] text-slate-500 font-mono"></span>
                 </div>
-                <button onclick="closeDraftModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+                <button onclick="closeDraftModal()" class="w-8 h-8 rounded-lg bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center border border-slate-200 transition">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
 
-            <!-- Modal Body -->
-            <div class="p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-12 gap-6">
-                <!-- Left: Image Preview & Actions (5 cols) -->
-                <div class="md:col-span-5 space-y-4">
-                    <div id="modalImageContainer"></div>
+            <!-- Modal Content (Scrollable Grid) -->
+            <div class="p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white">
+                <!-- Sisi Kiri: Caption & Prompt -->
+                <div class="space-y-4">
+                    <div>
+                        <h4 id="modalHeadline" class="text-base font-extrabold text-slate-900 leading-snug"></h4>
+                        <p id="modalSubheadline" class="text-xs text-teal-800 font-semibold mt-1"></p>
+                    </div>
 
-                    <!-- Direct Action Buttons -->
-                    <div class="space-y-2 pt-2">
-                        <button onclick="triggerScheduleNow()" id="btnScheduleNow" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition">
-                            <i data-lucide="calendar-check" class="w-4 h-4"></i> Schedule ke Aidelly Sekarang
-                        </button>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-700">Caption Resmi:</span>
+                            <button onclick="copyToClipboard('modalCaption')" class="text-[11px] text-teal-700 hover:underline font-semibold flex items-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                            </button>
+                        </div>
+                        <div id="modalCaption" class="text-xs text-slate-700 whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto p-2 bg-white rounded-lg border border-slate-200"></div>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-700">Prompt Visual AI:</span>
+                            <button onclick="copyToClipboard('modalPrompt')" class="text-[11px] text-teal-700 hover:underline font-semibold flex items-center gap-1">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                            </button>
+                        </div>
+                        <p id="modalPrompt" class="text-[11px] text-slate-600 font-mono leading-relaxed max-h-24 overflow-y-auto p-2 bg-white rounded-lg border border-slate-200"></p>
                     </div>
                 </div>
 
-                <!-- Right: Text & Details (7 cols) -->
-                <div class="md:col-span-7 space-y-4">
+                <!-- Sisi Kanan: Visual Render & Action -->
+                <div class="space-y-4 flex flex-col justify-between">
                     <div>
-                        <h3 id="modalHeadline" class="text-base font-bold text-white mb-1"></h3>
-                        <p id="modalSubheadline" class="text-xs text-slate-400"></p>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block flex items-center gap-1.5">
+                            <i data-lucide="image" class="w-4 h-4 text-teal-600"></i> Visual Poster Resmi:
+                        </span>
+                        <div id="modalImageContainer">
+                            <!-- Populated dynamically -->
+                        </div>
                     </div>
 
-                    <!-- Caption Preview -->
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400"></i> Draf Caption:
-                            </span>
-                            <button onclick="copyToClipboard('modalCaption')" class="text-xs text-emerald-400 hover:underline">Copy</button>
-                        </div>
-                        <pre id="modalCaption" class="text-xs text-slate-300 whitespace-pre-wrap font-sans bg-slate-900/60 p-3 rounded-lg border border-slate-800 max-h-44 overflow-y-auto"></pre>
-                    </div>
-
-                    <!-- Locked Prompt Preview -->
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                                <i data-lucide="image" class="w-3.5 h-3.5 text-blue-400"></i> Locked Gemini 3.8 Flash Prompt:
-                            </span>
-                            <button onclick="copyToClipboard('modalPrompt')" class="text-xs text-blue-400 hover:underline">Copy</button>
-                        </div>
-                        <p id="modalPrompt" class="text-xs text-slate-400 font-mono leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800 max-h-36 overflow-y-auto select-all"></p>
+                    <!-- Direct Schedule Action -->
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                        <button onclick="closeDraftModal()" class="px-4 py-2.5 text-xs text-slate-600 hover:text-slate-900 font-semibold rounded-xl border border-slate-200 hover:bg-slate-50 transition">
+                            Tutup
+                        </button>
+                        <button id="btnScheduleNow" onclick="triggerScheduleNow()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md shadow-emerald-600/20 flex items-center gap-2 transition">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i> Schedule ke Aidelly Sekarang
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 </html>

@@ -15,6 +15,7 @@ if current_dir not in sys.path:
 from engine.config import WORKSPACES, DOWNLOADS_DIR, BRAIN_DIR, PREFERRED_IMAGE_MODEL, AIDELLY_TOKEN
 from engine.calendar_scanner import get_existing_scheduled_posts, generate_monthly_slots, get_next_month
 from engine.holiday_scraper import get_indonesian_holidays, map_holidays_to_content_ideas
+from engine.trend_tracker import get_weekly_trending_data, map_trends_to_workspace_angles
 from engine.content_generator import TOPIC_BANK, generate_full_copy, generate_image_prompt
 from engine.image_pipeline import composite_post_image
 
@@ -48,9 +49,32 @@ def save_generated_db(items):
     except Exception as e:
         print(f"Error saving DB: {e}")
 
+# Weekly Cron Job Background Worker
+import threading
+import time
+
+def weekly_cron_worker():
+    """Background worker yang berjalan setiap 7 hari untuk memperbarui trending data secara otomatis."""
+    while True:
+        try:
+            # Tidur selama 7 hari (7 * 24 * 3600 detik)
+            time.sleep(7 * 24 * 3600)
+            print("[Cron-Job] Menjalankan update mingguan topik trending terkini...", flush=True)
+            get_weekly_trending_data(force_refresh=True)
+            print("[Cron-Job] Berhasil memperbarui database trending mingguan!", flush=True)
+        except Exception as e:
+            print(f"[Cron-Job] Warning: {e}", flush=True)
+
+@app.on_event("startup")
+async def startup_event():
+    # Jalankan cron thread sekali saat aplikasi start
+    cron_thread = threading.Thread(target=weekly_cron_worker, daemon=True)
+    cron_thread.start()
+    print("[Cron-Job] Weekly trending cron worker started (Interval: 7 Hari).", flush=True)
+
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "app": "OSEE Content Studio"}
+    return {"status": "ok", "app": "OSEE Content Studio", "cron_active": True}
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request, ws: str = "osee.co.id"):
@@ -65,6 +89,10 @@ async def dashboard(request: Request, ws: str = "osee.co.id"):
     # Get Indonesian holidays for current month
     holidays = get_indonesian_holidays(target_year, target_month)
     holiday_angles = map_holidays_to_content_ideas(ws, holidays)
+
+    # Get weekly trending topics (Google Trends, Social X/Threads/IG, Niche News)
+    weekly_trends = get_weekly_trending_data(force_refresh=False)
+    trending_angles = map_trends_to_workspace_angles(ws, weekly_trends.get("raw_list", []))
 
     # Get upcoming scheduled posts from Aidelly
     scheduled_posts = []
@@ -84,6 +112,8 @@ async def dashboard(request: Request, ws: str = "osee.co.id"):
         "current_ws": current_ws,
         "holidays": holidays,
         "holiday_angles": holiday_angles,
+        "weekly_trends": weekly_trends,
+        "trending_angles": trending_angles,
         "scheduled_posts": scheduled_posts[:20],
         "history": history[:15],
         "target_year": target_year,
@@ -91,6 +121,30 @@ async def dashboard(request: Request, ws: str = "osee.co.id"):
         "preferred_model": PREFERRED_IMAGE_MODEL
     }
     return templates.TemplateResponse(request=request, name="index.html", context=context)
+
+@app.get("/api/trending")
+async def api_trending(ws: str = "osee.co.id", refresh: bool = False):
+    trends_data = get_weekly_trending_data(force_refresh=refresh)
+    angles = map_trends_to_workspace_angles(ws, trends_data.get("raw_list", []))
+    return JSONResponse({
+        "success": True,
+        "workspace": ws,
+        "trends": trends_data,
+        "recommended_angles": angles
+    })
+
+@app.post("/api/trending/refresh")
+async def api_refresh_trending(ws: str = "osee.co.id"):
+    trends_data = get_weekly_trending_data(force_refresh=True)
+    angles = map_trends_to_workspace_angles(ws, trends_data.get("raw_list", []))
+    return JSONResponse({
+        "success": True,
+        "workspace": ws,
+        "updated_at": trends_data.get("display_date"),
+        "total_trends": trends_data.get("total_trends"),
+        "trends": trends_data,
+        "recommended_angles": angles
+    })
 
 @app.get("/api/holidays")
 async def api_holidays(year: int = None, month: int = None, ws: str = "osee.co.id"):
