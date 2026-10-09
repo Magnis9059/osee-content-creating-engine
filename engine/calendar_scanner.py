@@ -64,9 +64,9 @@ def get_existing_scheduled_posts(workspace_key):
                 'x-aidelly-workspace-id': ws_id
             }
         )
-        with urllib.request.urlopen(req, context=ctx) as res:
+        with urllib.request.urlopen(req, context=ctx, timeout=3) as res:
             data = json.loads(res.read().decode('utf-8'))
             return data.get('data', {}).get('posts', [])
     except Exception as e:
-        print(f"Warning fetching existing posts for {workspace_id}: {e}")
+        print(f"Warning fetching existing posts for {workspace_key}: {e}")
         return []
