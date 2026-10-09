@@ -51,14 +51,17 @@ def generate_monthly_slots(workspace_key, target_year=None, target_month=None):
 
     return generated_slots
 
-def get_existing_scheduled_posts(workspace_id):
+def get_existing_scheduled_posts(workspace_key):
     ctx = ssl.create_default_context()
+    ws_conf = WORKSPACES.get(workspace_key)
+    ws_id = ws_conf['id'] if ws_conf else workspace_key
+
     try:
         req = urllib.request.Request(
             f"{AIDELLY_BASE_URL}/posts",
             headers={
                 'Authorization': f'Bearer {AIDELLY_TOKEN}',
-                'x-aidelly-workspace-id': workspace_id
+                'x-aidelly-workspace-id': ws_id
             }
         )
         with urllib.request.urlopen(req, context=ctx) as res:
