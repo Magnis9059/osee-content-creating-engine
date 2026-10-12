@@ -17,7 +17,7 @@ from engine.calendar_scanner import get_existing_scheduled_posts, generate_month
 from engine.holiday_scraper import get_indonesian_holidays, map_holidays_to_content_ideas
 from engine.trend_tracker import get_weekly_trending_data, map_trends_to_workspace_angles
 from engine.content_generator import TOPIC_BANK, generate_full_copy, generate_image_prompt
-from engine.image_pipeline import composite_post_image
+from engine.image_pipeline import composite_post_image, resolve_visual_base
 
 app = FastAPI(title="OSEE Content Studio", description="Automated Content Engine for OSEE Brands")
 
@@ -274,20 +274,18 @@ async def api_generate_image(item_id: str = Form(...)):
         return JSONResponse({"error": "Draft item not found"}, status_code=404)
 
     ws_key = target_item["workspace"]
+    kw = target_item.get("keyword", "")
+    content_topic = (target_item.get("content_data") or {}).get("topic", "")
     
-    # 1. Use existing preview image as base or generate base
-    # Map to local pre-rendered high quality base images for fast response
-    base_file_map = {
-        'osee.co.id': r'C:\Users\Lenovo\.gemini\antigravity\brain\640e53ff-22a5-41d5-8111-2b58aad7508c\grad_osee_co_id_1791529869150.jpg',
-        'one-stop-english-education': r'C:\Users\Lenovo\.gemini\antigravity\brain\640e53ff-22a5-41d5-8111-2b58aad7508c\new_onestop_1791529336561.jpg',
-        'osee-digital': r'C:\Users\Lenovo\.gemini\antigravity\brain\640e53ff-22a5-41d5-8111-2b58aad7508c\clean_digital_v2_1791529823992.jpg'
-    }
+    # Calculate index within workspace drafts for alternating gender & setting
+    ws_items = [it for it in db if it.get("workspace") == ws_key]
+    item_idx = ws_items.index(target_item) if target_item in ws_items else 0
     
-    base_path = base_file_map.get(ws_key)
+    base_path, stamp_footer = resolve_visual_base(ws_key, keyword=kw, topic=content_topic, index=item_idx)
     out_filename = f"{item_id}_{ws_key.replace('.', '_')}.jpg"
     
     try:
-        final_img_path = composite_post_image(ws_key, base_path, content_type='toeic' if ws_key == 'osee.co.id' else 'toefl', output_filename=out_filename)
+        final_img_path = composite_post_image(ws_key, base_path, content_type='toeic' if ws_key == 'osee.co.id' else 'toefl', stamp_footer=stamp_footer, output_filename=out_filename)
         rel_url = f"/outputs/{os.path.basename(final_img_path)}"
         
         target_item["image_path"] = final_img_path
@@ -318,15 +316,14 @@ async def api_schedule_now(item_id: str = Form(...)):
     ws_key = target_item["workspace"]
     img_path = target_item.get("image_path")
     if not img_path or not os.path.exists(img_path):
-        # Auto-generate image first if not yet done
-        base_file_map = {
-            'osee.co.id': r'C:\Users\Lenovo\.gemini\antigravity\brain\640e53ff-22a5-41d5-8111-2b58aad7508c\grad_osee_co_id_1791529869150.jpg',
-            'one-stop-english-education': r'C:\Users\Lenovo\.gemini\antigravity\brain\640e53ff-22a5-41d5-8111-2b58aad7508c\new_onestop_1791529336561.jpg',
-            'osee-digital': r'C:\Users\Lenovo\.gemini\antigravity\brain\640e53ff-22a5-41d5-8111-2b58aad7508c\clean_digital_v2_1791529823992.jpg'
-        }
-        base_path = base_file_map.get(ws_key)
+        kw = target_item.get("keyword", "")
+        content_topic = (target_item.get("content_data") or {}).get("topic", "")
+        ws_items = [it for it in db if it.get("workspace") == ws_key]
+        item_idx = ws_items.index(target_item) if target_item in ws_items else 0
+        
+        base_path, stamp_footer = resolve_visual_base(ws_key, keyword=kw, topic=content_topic, index=item_idx)
         out_filename = f"{item_id}_{ws_key.replace('.', '_')}.jpg"
-        img_path = composite_post_image(ws_key, base_path, output_filename=out_filename)
+        img_path = composite_post_image(ws_key, base_path, content_type='toeic' if ws_key == 'osee.co.id' else 'toefl', stamp_footer=stamp_footer, output_filename=out_filename)
         target_item["image_path"] = img_path
         target_item["image_url"] = f"/outputs/{os.path.basename(img_path)}"
 

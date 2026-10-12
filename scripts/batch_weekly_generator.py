@@ -10,7 +10,7 @@ if parent_dir not in sys.path:
 
 from engine.calendar_scanner import get_upcoming_schedule_slots
 from engine.content_generator import generate_full_copy, generate_image_prompt
-from engine.image_pipeline import composite_post_image
+from engine.image_pipeline import composite_post_image, resolve_visual_base
 from app import load_generated_db, save_generated_db
 
 # 12 Oct to 18 Oct 2026: 4 contents per workspace matching the exact schedule slots
@@ -222,11 +222,11 @@ for idx, plan in enumerate(weekly_content_plan):
     prompt = generate_image_prompt(ws, content_data)
     item_id = f"item_{int(datetime.datetime.now().timestamp() * 1000) + idx * 10}"
 
-    # Render HD composite poster image immediately
-    base_path = base_file_map[ws]
+    # Render HD composite poster image dynamically matching topic and alternating talent
+    base_path, stamp_footer = resolve_visual_base(ws, keyword=plan['custom_keyword'], topic=f"{plan['headline']} - {plan['subheadline']}", index=plan['slot_index'])
     out_filename = f"{item_id}_{ws.replace('.', '_')}.jpg"
     content_type = 'toeic' if ws == 'osee.co.id' else 'toefl'
-    final_img_path = composite_post_image(ws, base_path, content_type=content_type, output_filename=out_filename)
+    final_img_path = composite_post_image(ws, base_path, content_type=content_type, stamp_footer=stamp_footer, output_filename=out_filename)
     rel_url = f"/outputs/{os.path.basename(final_img_path)}"
 
     item_record = {
