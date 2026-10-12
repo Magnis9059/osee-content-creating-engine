@@ -51,6 +51,44 @@ def generate_monthly_slots(workspace_key, target_year=None, target_month=None):
 
     return generated_slots
 
+def get_upcoming_schedule_slots(workspace_key, days_ahead=7, skip_past_hours=1):
+    """
+    Menghasilkan slot jadwal yang valid ke depan (future slots) mulai dari sekarang.
+    Secara otomatis memilih jam upload optimal sesuai niche setting workspace.
+    """
+    ws = WORKSPACES.get(workspace_key)
+    if not ws:
+        raise ValueError(f"Unknown workspace key: {workspace_key}")
+
+    now = datetime.datetime.now()
+    cutoff_time = now + datetime.timedelta(hours=skip_past_hours)
+    slots_config = ws['schedule_slots']
+    upcoming = []
+
+    for day_offset in range(days_ahead + 2):
+        target_date = now.date() + datetime.timedelta(days=day_offset)
+        weekday = target_date.weekday()
+
+        for slot in slots_config:
+            if slot['day_of_week'] == weekday:
+                slot_time = datetime.datetime(target_date.year, target_date.month, target_date.day, slot['hour'], slot['minute'])
+                if slot_time > cutoff_time:
+                    utc_dt = slot_time - datetime.timedelta(hours=7)
+                    iso_utc = utc_dt.strftime('%Y-%m-%dT%H:%M:%S.000Z')
+                    wib_str = slot_time.strftime('%A, %d %B %Y %H:%M WIB')
+
+                    upcoming.append({
+                        'workspace_key': workspace_key,
+                        'datetime_wib': slot_time,
+                        'wib_str': wib_str,
+                        'iso_utc': iso_utc,
+                        'date_str': target_date.strftime('%Y-%m-%d')
+                    })
+
+    # Sort ascending by datetime
+    upcoming.sort(key=lambda s: s['datetime_wib'])
+    return upcoming[:days_ahead]
+
 def get_existing_scheduled_posts(workspace_key):
     ctx = ssl.create_default_context()
     ws_conf = WORKSPACES.get(workspace_key)

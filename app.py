@@ -13,7 +13,7 @@ if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
 
 from engine.config import WORKSPACES, DOWNLOADS_DIR, BRAIN_DIR, PREFERRED_IMAGE_MODEL, AIDELLY_TOKEN
-from engine.calendar_scanner import get_existing_scheduled_posts, generate_monthly_slots, get_next_month
+from engine.calendar_scanner import get_existing_scheduled_posts, generate_monthly_slots, get_next_month, get_upcoming_schedule_slots
 from engine.holiday_scraper import get_indonesian_holidays, map_holidays_to_content_ideas
 from engine.trend_tracker import get_weekly_trending_data, map_trends_to_workspace_angles
 from engine.content_generator import TOPIC_BANK, generate_full_copy, generate_image_prompt
@@ -220,6 +220,13 @@ async def api_generate(
     image_prompt = generate_image_prompt(workspace, content_data)
 
     item_id = f"item_{int(datetime.datetime.now().timestamp() * 1000)}"
+    
+    # Auto-assign recommended slot if not provided
+    recommended_slot = None
+    upcoming_slots = get_upcoming_schedule_slots(workspace, days_ahead=7)
+    if upcoming_slots:
+        recommended_slot = upcoming_slots[0]
+
     new_item = {
         "id": item_id,
         "workspace": workspace,
@@ -229,6 +236,10 @@ async def api_generate(
         "caption": caption_copy,
         "image_prompt": image_prompt,
         "image_url": None,
+        "recommended_schedule": {
+            "wib_str": recommended_slot['wib_str'],
+            "iso_utc": recommended_slot['iso_utc']
+        } if recommended_slot else None,
         "status": "DRAFT_READY"
     }
 
@@ -319,17 +330,21 @@ async def api_schedule_now(item_id: str = Form(...)):
         target_item["image_path"] = img_path
         target_item["image_url"] = f"/outputs/{os.path.basename(img_path)}"
 
-    # Get next available slot
-    slots = generate_monthly_slots(ws_key)
-    slot = slots[0] if slots else None
-    
-    if not slot:
-        now = datetime.datetime.now() + datetime.timedelta(days=1)
-        iso_utc = now.strftime('%Y-%m-%dT10:00:00.000Z')
-        wib_str = now.strftime('%A, %d %B %Y 17:00 WIB')
+    # Get next available slot (prioritize pre-calculated recommended_schedule)
+    rec_sched = target_item.get("recommended_schedule")
+    if rec_sched and rec_sched.get("iso_utc"):
+        iso_utc = rec_sched["iso_utc"]
+        wib_str = rec_sched["wib_str"]
     else:
-        iso_utc = slot['iso_utc']
-        wib_str = slot['wib_str']
+        slots = get_upcoming_schedule_slots(ws_key, days_ahead=7)
+        slot = slots[0] if slots else None
+        if not slot:
+            now = datetime.datetime.now() + datetime.timedelta(days=1)
+            iso_utc = now.strftime('%Y-%m-%dT10:00:00.000Z')
+            wib_str = now.strftime('%A, %d %B %Y 17:00 WIB')
+        else:
+            iso_utc = slot['iso_utc']
+            wib_str = slot['wib_str']
 
     from engine.aidelly_scheduler import schedule_post_to_all_workspace_accounts
     try:
