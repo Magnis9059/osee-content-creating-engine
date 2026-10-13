@@ -2,26 +2,25 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
+_HOLIDAYS_CACHE = {}
+
 def get_indonesian_holidays(year: int = None, month: int = None):
-    """
-    Scrape and query Indonesian National Holidays & Observances (Hari Libur Nasional & Hari Besar)
-    Uses multi-source fallback:
-    1. Public Indonesian Holidays API (api-harilibur / date.nager)
-    2. Web scraping fallback from public holiday portals
-    3. Comprehensive embedded database of official Indonesian observances per month
-    """
     now = datetime.datetime.now()
     if year is None:
         year = now.year
     if month is None:
         month = now.month
 
+    cache_key = (year, month)
+    if cache_key in _HOLIDAYS_CACHE:
+        return _HOLIDAYS_CACHE[cache_key]
+
     holidays = []
 
     # Source 1: Query public dayoff API
     try:
         url = f"https://dayoffapi.vercel.app/api?year={year}"
-        resp = requests.get(url, timeout=5)
+        resp = requests.get(url, timeout=1.5)
         if resp.status_code == 200:
             data = resp.json()
             for item in data:
@@ -149,6 +148,7 @@ def get_indonesian_holidays(year: int = None, month: int = None):
 
     # Sort chronologically
     holidays.sort(key=lambda x: x['date'])
+    _HOLIDAYS_CACHE[cache_key] = holidays
     return holidays
 
 def map_holidays_to_content_ideas(workspace_key: str, holidays: list):

@@ -89,7 +89,14 @@ def get_upcoming_schedule_slots(workspace_key, days_ahead=7, skip_past_hours=1):
     upcoming.sort(key=lambda s: s['datetime_wib'])
     return upcoming[:days_ahead]
 
+_POSTS_CACHE = {}
+
 def get_existing_scheduled_posts(workspace_key):
+    now_ts = datetime.datetime.now().timestamp()
+    cached = _POSTS_CACHE.get(workspace_key)
+    if cached and (now_ts - cached['time']) < 60:
+        return cached['data']
+
     ctx = ssl.create_default_context()
     ws_conf = WORKSPACES.get(workspace_key)
     ws_id = ws_conf['id'] if ws_conf else workspace_key
@@ -102,9 +109,12 @@ def get_existing_scheduled_posts(workspace_key):
                 'x-aidelly-workspace-id': ws_id
             }
         )
-        with urllib.request.urlopen(req, context=ctx, timeout=3) as res:
+        with urllib.request.urlopen(req, context=ctx, timeout=2) as res:
             data = json.loads(res.read().decode('utf-8'))
-            return data.get('data', {}).get('posts', [])
+            posts = data.get('data', {}).get('posts', [])
+            _POSTS_CACHE[workspace_key] = {'time': now_ts, 'data': posts}
+            return posts
     except Exception as e:
         print(f"Warning fetching existing posts for {workspace_key}: {e}")
-        return []
+        return cached['data'] if cached else []
+
